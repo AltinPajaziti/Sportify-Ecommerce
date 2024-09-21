@@ -15,7 +15,7 @@ namespace Sportify.Controllers
 
 
         [HttpPost , Authorize(Roles ="Admin")]
-        public async Task<List<Products>> GetProducts(Products produkti)
+        public async Task<List<Products>> hello(Products produkti)
         {
 
             _products.Add(produkti);    
