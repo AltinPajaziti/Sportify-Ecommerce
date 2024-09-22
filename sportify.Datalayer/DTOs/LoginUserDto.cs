@@ -10,5 +10,8 @@ namespace sportify.Datalayer.DTOs
     {
         public string Username { get; set; }
         public string Token { get; set; }
+
+        public string Status { get; set; } = string.Empty;
+        public string Role { get; set; }
     }
 }

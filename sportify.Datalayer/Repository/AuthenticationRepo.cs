@@ -51,7 +51,10 @@ namespace sportify.Datalayer.Repository
             var loginUserDto = new LoginUserDto
             {
                 Username = loginDto.Username,
-                Token = _Token.CreateToken(User)
+                Token = _Token.CreateToken(User),
+                Role = (User.Roleid == 1) ? "Admin" : "User",
+
+                Status = "ok"
             };
 
             return loginUserDto;
