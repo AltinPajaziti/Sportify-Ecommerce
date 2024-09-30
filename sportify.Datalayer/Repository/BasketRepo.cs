@@ -1,4 +1,5 @@
-﻿using sportify.core.cs;
+﻿using Microsoft.EntityFrameworkCore;
+using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 using System;
@@ -28,10 +29,49 @@ namespace sportify.Datalayer.Repository
         public Task<IEnumerable<Produktet>> AddToBasket(ProductDto product)
         {
 
-            var product = _context.products.
-          
+            var userid = _token.GetUserIdFromToken(product.Token);
 
-            
+            if(userid == null)
+            {
+                throw new Exception("you should be logged in");
+            }
+
+            var basket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(u=>u.userid == Int32.Parse(userid)) ?? new Basket
+            {
+                userid = Int32.Parse(userid),
+                BasketProducts = new List<BasketProduct>()
+            };
+
+
+            if (!basket.BasketProducts.Any(bp => bp.Productid == product.id))
+            {
+                // Add the product to the basket
+                basket.BasketProducts.Add(new BasketProduct
+                {
+                    BasketId = basket.userid,
+                   // ProductId = product.ProductId
+                });
+            }
+
+            //if (basket.BasketId == 0)
+            //{
+            //    _context.Baskets.Add(basket);
+            //}
+
+            // Save changes to the database
+            //await _context.SaveChangesAsync();
+
+            // Return the updated products in the basket
+            //return basket.BasketProducts.Select(bp => bp.Product);
+
+
+
+
+
+
+
+
+
         }
     }
 }
