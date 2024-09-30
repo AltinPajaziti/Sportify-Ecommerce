@@ -1,23 +1,20 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace sportify.core.cs
+namespace sportify.Datalayer.DTOs
 {
-    public class Products : BaseEntity
+    public class ProductDto
     {
-        public Products()
-        {
-            GId = Guid.NewGuid(); 
-        }
+        public int id { get; set; }
         public Guid GId { get; set; }
-
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
 
         public string Photo { get; set; }
-
-
-
 
     }
 }

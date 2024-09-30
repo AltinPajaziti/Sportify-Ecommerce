@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sportify.Datalayer;
 
@@ -11,9 +12,11 @@ using sportify.Datalayer;
 namespace sportify.Datalayer.Migrations
 {
     [DbContext(typeof(SportifyContext))]
-    partial class SportifyContextModelSnapshot : ModelSnapshot
+    [Migration("20240925123557_Guidaddedagain")]
+    partial class Guidaddedagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,15 +46,7 @@ namespace sportify.Datalayer.Migrations
                     b.Property<int>("QTY")
                         .HasColumnType("int");
 
-                    b.Property<int>("userid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("usersid")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
-
-                    b.HasIndex("usersid");
 
                     b.ToTable("basket");
                 });
@@ -220,17 +215,6 @@ namespace sportify.Datalayer.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("sportify.core.cs.Basket", b =>
-                {
-                    b.HasOne("sportify.core.cs.Users", "users")
-                        .WithMany("Basket")
-                        .HasForeignKey("usersid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("users");
-                });
-
             modelBuilder.Entity("sportify.core.cs.Users", b =>
                 {
                     b.HasOne("sportify.core.cs.Roles", "Roli")
@@ -245,11 +229,6 @@ namespace sportify.Datalayer.Migrations
             modelBuilder.Entity("sportify.core.cs.Roles", b =>
                 {
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("sportify.core.cs.Users", b =>
-                {
-                    b.Navigation("Basket");
                 });
 #pragma warning restore 612, 618
         }

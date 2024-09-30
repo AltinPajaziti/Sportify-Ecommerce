@@ -22,5 +22,9 @@ namespace sportify.core.cs
         public Roles Roli { get; set; }
 
         public string Email { get; set; }
+
+        public ICollection<Basket> Basket { get; set; }
+
+
     }
 }

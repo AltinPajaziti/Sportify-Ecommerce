@@ -51,6 +51,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddScoped<IToken, TokenRepo>();
+builder.Services.AddScoped<IProducts, Products>();
 builder.Services.AddScoped<Authentication, AuthenticationRepo>();
 
 var tokenKey = builder.Configuration.GetValue<string>("TokenKey");

@@ -1,0 +1,20 @@
+﻿using sportify.core.cs;
+using sportify.Datalayer.Repository;
+using sportify.core.cs;
+using sportify.Datalayer.DTOs;
+using Products = sportify.core.cs.Products;
+
+namespace sportify.Datalayer.Interfaces
+{
+    public interface IProducts
+    {
+        Task<List<ProductDto>> GetProducts();
+
+        Task<ProductDto> GetProductById(Guid id);
+
+        Task<Products> CreateProduct(ProductDto product);
+
+
+
+    }
+}
