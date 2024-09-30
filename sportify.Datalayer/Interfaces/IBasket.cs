@@ -1,4 +1,5 @@
 ﻿using sportify.core.cs;
+using sportify.Datalayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace sportify.Datalayer.Interfaces
 {
-    public interface IToken
+    public interface IBasket
     {
-        string CreateToken(Users user);
-
-        string GetUserIdFromToken(string token);
+        Task<IEnumerable<Products>> AddToBasket(ProductDto product);
     }
 }

@@ -17,6 +17,9 @@ namespace sportify.core.cs
         public string Photo { get; set; }
 
 
+        public ICollection<BasketProduct> BasketProducts { get; set; }
+
+
 
 
     }

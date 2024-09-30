@@ -14,6 +14,23 @@ namespace sportify.Datalayer.Repository
         private IConfiguration _configuration;
 
 
+
+        public string GetUserIdFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            if (jwtToken == null)
+                throw new SecurityTokenException("Invalid token.");
+
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            return userIdClaim?.Value;
+
+        }
+
+
+
+
         public TokenRepo(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -57,4 +74,7 @@ namespace sportify.Datalayer.Repository
 
         }
     }
+
+
+   
 }

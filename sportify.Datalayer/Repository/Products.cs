@@ -71,6 +71,8 @@ namespace sportify.Datalayer.Repository
             return null;
         }
 
+        
+
         public async  Task<Produktet> CreateProduct(ProductDto product)
         {
             if(product != null)
@@ -91,6 +93,28 @@ namespace sportify.Datalayer.Repository
             }
 
             return null;
+        }
+
+
+
+        public async Task<List<Produktet>> GetFilterProducts(ProductNameFilter productName)
+        {
+            var filteredProducts = await _context.products
+                .Where(p => p.Name.Contains(productName.Name))
+                .ToListAsync();
+
+            return filteredProducts;
+        }
+
+       
+
+        public async Task<List<Produktet>> GetPriceFiltered(PriceProductFilter productPrice)
+        {
+            var filteredProducts = await _context.products
+                .Where(p => p.Price > productPrice.price || p.Price < productPrice.price || p.Price == productPrice.price)
+                .ToListAsync();
+
+            return filteredProducts;
         }
     }
 }

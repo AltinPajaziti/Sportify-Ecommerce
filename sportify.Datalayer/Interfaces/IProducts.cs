@@ -14,6 +14,9 @@ namespace sportify.Datalayer.Interfaces
 
         Task<Products> CreateProduct(ProductDto product);
 
+        Task<List<Products>> GetFilterProducts(ProductNameFilter productName);
+
+        Task<List<Products>> GetPriceFiltered(PriceProductFilter productPrice);
 
 
     }

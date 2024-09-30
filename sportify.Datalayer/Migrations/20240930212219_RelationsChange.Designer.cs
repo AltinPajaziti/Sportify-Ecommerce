@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sportify.Datalayer;
 
@@ -11,9 +12,11 @@ using sportify.Datalayer;
 namespace sportify.Datalayer.Migrations
 {
     [DbContext(typeof(SportifyContext))]
-    partial class SportifyContextModelSnapshot : ModelSnapshot
+    [Migration("20240930212219_RelationsChange")]
+    partial class RelationsChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,13 @@ namespace sportify.Datalayer.Migrations
 
                     b.Property<string>("LastModified")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
 
                     b.Property<int>("userid")
                         .HasColumnType("int");
