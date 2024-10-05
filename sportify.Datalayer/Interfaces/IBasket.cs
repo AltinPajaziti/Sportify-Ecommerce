@@ -10,6 +10,8 @@ namespace sportify.Datalayer.Interfaces
 {
     public interface IBasket
     {
-        Task<IEnumerable<Products>> AddToBasket(ProductDto product);
+        Task<ProductDto> AddToBasket(ProductDto product);
+
+        Task<bool> DeleteProduct(int pid);
     }
 }

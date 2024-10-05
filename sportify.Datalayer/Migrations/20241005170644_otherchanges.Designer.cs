@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sportify.Datalayer;
 
@@ -11,9 +12,11 @@ using sportify.Datalayer;
 namespace sportify.Datalayer.Migrations
 {
     [DbContext(typeof(SportifyContext))]
-    partial class SportifyContextModelSnapshot : ModelSnapshot
+    [Migration("20241005170644_otherchanges")]
+    partial class otherchanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace sportify.Datalayer.Migrations
                     b.HasIndex("userid")
                         .IsUnique();
 
-                    b.ToTable("basket", (string)null);
+                    b.ToTable("basket");
                 });
 
             modelBuilder.Entity("sportify.core.cs.BasketProduct", b =>
@@ -55,17 +58,23 @@ namespace sportify.Datalayer.Migrations
                     b.Property<int>("Productid")
                         .HasColumnType("int");
 
-                    b.Property<int>("BasketProductID")
-                        .HasColumnType("int");
+                    b.Property<string>("Insertedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModified")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Qty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("id")
                         .HasColumnType("int");
 
                     b.HasKey("BasketId", "Productid");
 
                     b.HasIndex("Productid");
 
-                    b.ToTable("BasketProduct", (string)null);
+                    b.ToTable("BasketProduct");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Category", b =>
@@ -88,7 +97,7 @@ namespace sportify.Datalayer.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("category");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Contact", b =>
@@ -127,7 +136,7 @@ namespace sportify.Datalayer.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("contacts", (string)null);
+                    b.ToTable("contacts");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Products", b =>
@@ -164,7 +173,7 @@ namespace sportify.Datalayer.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("products", (string)null);
+                    b.ToTable("products");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Roles", b =>
@@ -181,7 +190,7 @@ namespace sportify.Datalayer.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Users", b =>
@@ -229,7 +238,7 @@ namespace sportify.Datalayer.Migrations
 
                     b.HasIndex("Roleid");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("sportify.core.cs.Basket", b =>

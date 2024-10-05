@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Produktet = sportify.core.cs.Products;
@@ -16,62 +18,155 @@ namespace sportify.Datalayer.Repository
 
         private readonly SportifyContext _context;
         private readonly IToken _token;
+        private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public BasketRepo(  SportifyContext context , IToken token)
+        public BasketRepo(SportifyContext context, IToken token, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _token = token;
-            
+            _contextAccessor = httpContextAccessor;
+
         }
-
-
-        public Task<IEnumerable<Produktet>> AddToBasket(ProductDto product)
+        public async Task<ProductDto> AddToBasket(ProductDto product)
         {
+            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+                       .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            var userid = _token.GetUserIdFromToken(product.Token);
-
-            if(userid == null)
+            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
             {
-                throw new Exception("you should be logged in");
+                throw new Exception("User ID not found in claims.");
+            }
+            var userExists = await _context.users.AnyAsync(u => u.id == Userid);
+            if (!userExists)
+            {
+                throw new Exception("User does not exist");
             }
 
-            var basket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(u=>u.userid == Int32.Parse(userid)) ?? new Basket
+            var existingBasket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(b => b.userid == Userid);
+            if (existingBasket == null)
             {
-                userid = Int32.Parse(userid),
-                BasketProducts = new List<BasketProduct>()
-            };
-
-
-            if (!basket.BasketProducts.Any(bp => bp.Productid == product.id))
-            {
-                // Add the product to the basket
-                basket.BasketProducts.Add(new BasketProduct
+              var newbasket = new Basket
                 {
-                    BasketId = basket.userid,
-                   // ProductId = product.ProductId
-                });
+                  
+                    userid = Userid,
+                    BasketProducts = new List<BasketProduct>()
+                };
+                _context.basket.Add(newbasket);
+
+
+                var newBasketProduct = new BasketProduct
+                    {
+                        BasketId = newbasket.id,
+                        Productid = product.id,
+                        Qty = 1
+                    };
+                newbasket.BasketProducts.Add(newBasketProduct);          
+
+            }
+            else
+            {
+                var productExists = existingBasket.BasketProducts.FirstOrDefault(bp => bp.Productid == product.id);
+
+                if (productExists == null)
+                {
+                    var newBasketProduct = new BasketProduct
+                    {
+                        BasketId = existingBasket.id,
+                        Productid = product.id,
+                        Qty = 1
+                    };
+                    existingBasket.BasketProducts.Add(newBasketProduct);
+                }
+                else
+                {
+                    productExists.Qty += 1;
+                }
+
             }
 
-            //if (basket.BasketId == 0)
-            //{
-            //    _context.Baskets.Add(basket);
-            //}
-
-            // Save changes to the database
-            //await _context.SaveChangesAsync();
-
-            // Return the updated products in the basket
-            //return basket.BasketProducts.Select(bp => bp.Product);
+           
+            
 
 
+            await _context.SaveChangesAsync();
+
+            return product; 
+        }
+
+        public async Task<bool>  DeleteProduct(int pid)
+        {
+            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+                      .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+            {
+                throw new Exception("User ID not found in claims.");
+            }
+
+            var existingbucket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(b => b.userid == Userid);
 
 
+            var product = existingbucket.BasketProducts.FirstOrDefault(p => p.Productid == pid);
+
+
+            if(product.Qty > 1) { product.Qty -= 1; }
+
+            else
+            {
+                existingbucket.BasketProducts.Remove(product);
+                if(existingbucket.BasketProducts.Count == 0)
+                {
+                    _context.basket.Remove(existingbucket);
+                }
+
+               
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
 
 
 
 
 
         }
+
+
+
+        public async Task<Products> UpdateProduct(int id, ProductDto newproduct)
+        {
+            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+                      .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+            {
+                throw new Exception("User ID not found in claims.");
+            }
+
+            var basket = await _context.basket
+                .Include(b => b.BasketProducts)
+                .FirstOrDefaultAsync(b => b.userid == Userid);
+
+            if (basket == null)
+            {
+                throw new Exception("Basket not found for the user.");
+            }
+
+            var product = basket.BasketProducts.FirstOrDefault(p => p.Productid == id);
+            if (product == null)
+            {
+                throw new Exception("Product not found in the basket.");
+            }
+
+      //      product.Qty = newproduct.qty; 
+
+            await _context.SaveChangesAsync();
+
+        //    return product;
+        }
+
     }
 }
+
+

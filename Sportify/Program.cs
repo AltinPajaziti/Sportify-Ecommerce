@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -53,6 +52,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IToken, TokenRepo>();
 builder.Services.AddScoped<IProducts, Products>();
 builder.Services.AddScoped<Authentication, AuthenticationRepo>();
+builder.Services.AddScoped<IBasket , BasketRepo>();
 
 var tokenKey = builder.Configuration.GetValue<string>("TokenKey");
 
@@ -68,6 +68,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

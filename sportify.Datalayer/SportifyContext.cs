@@ -40,6 +40,8 @@ namespace sportify.Datalayer
             modelBuilder.Entity<BasketProduct>()
             .HasKey(bp => new { bp.BasketId, bp.Productid });
 
+
+
             modelBuilder.Entity<BasketProduct>()
                 .HasOne(bp => bp.basket)
                 .WithMany(b => b.BasketProducts)
@@ -50,7 +52,11 @@ namespace sportify.Datalayer
                 .WithMany(p => p.BasketProducts)
                 .HasForeignKey(bp => bp.Productid);
 
-
+            modelBuilder.Entity<Users>()
+           .HasOne(u => u.Basket)
+           .WithOne(c => c.users)
+           .HasForeignKey<Basket>(c => c.userid)
+           .OnDelete(DeleteBehavior.Cascade);
 
         }
 

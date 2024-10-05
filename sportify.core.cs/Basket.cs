@@ -11,10 +11,11 @@ namespace sportify.core.cs
     {
        
 
-        public ICollection<BasketProduct> BasketProducts { get; set; }
 
 
         public int userid { get; set; }
         public Users users { get; set; }
+        public ICollection<BasketProduct> BasketProducts { get; set; }
+
     }
 }

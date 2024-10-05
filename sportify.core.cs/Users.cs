@@ -23,7 +23,7 @@ namespace sportify.core.cs
 
         public string Email { get; set; }
 
-        public ICollection<Basket> Basket { get; set; }
+        public Basket Basket { get; set; }
 
 
     }

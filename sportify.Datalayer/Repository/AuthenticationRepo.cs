@@ -52,7 +52,7 @@ namespace sportify.Datalayer.Repository
             {
                 Username = loginDto.Username,
                 Token = _Token.CreateToken(User),
-                Role = (User.Roleid == 1) ? "Admin" : "User",
+                Role = (User.Roleid == 1003) ? "Admin" : "User",
 
                 Status = "ok"
             };
@@ -73,9 +73,6 @@ namespace sportify.Datalayer.Repository
 
             var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password));
 
-
-
-
             var Register = new Users
             {
                 Name = register.Name,
@@ -84,9 +81,7 @@ namespace sportify.Datalayer.Repository
                 Email = register.Email,
                 PasswordSalt = hmac.Key,
                 PasswordHash = passwordHash,
-                Roleid = 1
-
-
+                Roleid = 1004
 
             };
 
