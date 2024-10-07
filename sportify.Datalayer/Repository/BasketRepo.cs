@@ -134,37 +134,37 @@ namespace sportify.Datalayer.Repository
 
 
 
-        public async Task<Products> UpdateProduct(int id, ProductDto newproduct)
-        {
-            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
-                      .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+      //  public async Task<Products> UpdateProduct(int id, ProductDto newproduct)
+      //  {
+      //      var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+      //                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
-            {
-                throw new Exception("User ID not found in claims.");
-            }
+      //      if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+      //      {
+      //          throw new Exception("User ID not found in claims.");
+      //      }
 
-            var basket = await _context.basket
-                .Include(b => b.BasketProducts)
-                .FirstOrDefaultAsync(b => b.userid == Userid);
+      //      var basket = await _context.basket
+      //          .Include(b => b.BasketProducts)
+      //          .FirstOrDefaultAsync(b => b.userid == Userid);
 
-            if (basket == null)
-            {
-                throw new Exception("Basket not found for the user.");
-            }
+      //      if (basket == null)
+      //      {
+      //          throw new Exception("Basket not found for the user.");
+      //      }
 
-            var product = basket.BasketProducts.FirstOrDefault(p => p.Productid == id);
-            if (product == null)
-            {
-                throw new Exception("Product not found in the basket.");
-            }
+      //      var product = basket.BasketProducts.FirstOrDefault(p => p.Productid == id);
+      //      if (product == null)
+      //      {
+      //          throw new Exception("Product not found in the basket.");
+      //      }
 
-      //      product.Qty = newproduct.qty; 
+      ////      product.Qty = newproduct.qty; 
 
-            await _context.SaveChangesAsync();
+      //      await _context.SaveChangesAsync();
 
-        //    return product;
-        }
+      //  //    return product;
+      //  }
 
     }
 }

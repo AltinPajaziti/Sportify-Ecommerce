@@ -19,5 +19,8 @@ namespace sportify.Datalayer.Interfaces
         Task<List<Products>> GetPriceFiltered(PriceProductFilter productPrice);
 
 
+
+        Task<List<Products>> FilterProducts(string input, string location, decimal? priceFrom, decimal? priceTo);
+
     }
 }

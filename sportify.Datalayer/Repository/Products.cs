@@ -38,8 +38,6 @@ namespace sportify.Datalayer.Repository
                     Description = product.Description,
                     Photo = product.Photo,
                     Price = product.Price,
-                    
-
                 }
                 );
             }
@@ -48,7 +46,14 @@ namespace sportify.Datalayer.Repository
 
 
         }
+        public async Task<List<Produktet>> FilterByPrice(int FromPrice, int ToPrice)
+        {
+            var produktet = await _context.products
+                .Where(p => p.Price >= FromPrice && p.Price <= ToPrice)
+                .ToListAsync();
 
+            return produktet;
+        }
 
 
         public async Task<ProductDto> GetProductById(Guid id)
@@ -106,7 +111,9 @@ namespace sportify.Datalayer.Repository
             return filteredProducts;
         }
 
-       
+  
+
+
 
         public async Task<List<Produktet>> GetPriceFiltered(PriceProductFilter productPrice)
         {
@@ -115,6 +122,32 @@ namespace sportify.Datalayer.Repository
                 .ToListAsync();
 
             return filteredProducts;
+        }
+
+        public Task<List<Produktet>> FilterProducts(string input, string location, decimal? priceFrom, decimal? priceTo)
+        {
+            var query = _context.products.AsQueryable();
+            if (!string.IsNullOrEmpty(input))
+            {
+                query = query.Where(p => p.Name.Contains(input) || p.Description.Contains(input));
+            }
+
+            //if (!string.IsNullOrEmpty(location))
+            //{
+            //    query = query.Where(p => p.Location == location);
+            //}
+
+            if (priceFrom.HasValue)
+            {
+                query = query.Where(p => p.Price >= priceFrom.Value);
+            }
+
+            if (priceTo.HasValue)
+            {
+                query = query.Where(p => p.Price <= priceTo.Value);
+            }
+
+            return query.ToListAsync();
         }
     }
 }
