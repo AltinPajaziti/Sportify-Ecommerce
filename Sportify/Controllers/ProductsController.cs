@@ -74,6 +74,22 @@ namespace Sportify.Controllers
 
         }
 
+        [HttpPost("GetFiltered-Products")]
+        public async Task<ActionResult<List<Produktet>>> FilterProducts([FromBody] FilterProductsDto products)
+        {
+            try
+            {
+                var filteredList = await _products.FilterProducts(products);
+
+                return Ok(filteredList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
 
     }

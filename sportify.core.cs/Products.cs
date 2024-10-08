@@ -15,6 +15,7 @@ namespace sportify.core.cs
         public decimal Price { get; set; }
 
         public string Photo { get; set; }
+        public ICollection<FavoriteProducts> FavoriteProducts { get; set; }
 
 
         public ICollection<BasketProduct> BasketProducts { get; set; }

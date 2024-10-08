@@ -124,12 +124,12 @@ namespace sportify.Datalayer.Repository
             return filteredProducts;
         }
 
-        public Task<List<Produktet>> FilterProducts(string input, string location, decimal? priceFrom, decimal? priceTo)
+        public Task<List<Produktet>> FilterProducts(FilterProductsDto products)
         {
             var query = _context.products.AsQueryable();
-            if (!string.IsNullOrEmpty(input))
+            if (!string.IsNullOrEmpty(products.Input))
             {
-                query = query.Where(p => p.Name.Contains(input) || p.Description.Contains(input));
+                query = query.Where(p => p.Name.Contains(products.Input) || p.Description.Contains(products.Input));
             }
 
             //if (!string.IsNullOrEmpty(location))
@@ -137,14 +137,14 @@ namespace sportify.Datalayer.Repository
             //    query = query.Where(p => p.Location == location);
             //}
 
-            if (priceFrom.HasValue)
+            if (products.PriceFrom.HasValue)
             {
-                query = query.Where(p => p.Price >= priceFrom.Value);
+                query = query.Where(p => p.Price >= products.PriceFrom.Value);
             }
 
-            if (priceTo.HasValue)
+            if (products.PriceTo.HasValue)
             {
-                query = query.Where(p => p.Price <= priceTo.Value);
+                query = query.Where(p => p.Price <= products.PriceTo.Value);
             }
 
             return query.ToListAsync();

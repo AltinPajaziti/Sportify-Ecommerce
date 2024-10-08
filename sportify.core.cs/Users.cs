@@ -26,5 +26,7 @@ namespace sportify.core.cs
         public Basket Basket { get; set; }
 
 
+        public ICollection<FavoriteProducts> FavoriteProducts { get; set; }
+
     }
 }

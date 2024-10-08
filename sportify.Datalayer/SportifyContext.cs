@@ -52,6 +52,23 @@ namespace sportify.Datalayer
                 .WithMany(p => p.BasketProducts)
                 .HasForeignKey(bp => bp.Productid);
 
+
+            //
+            modelBuilder.Entity<FavoriteProducts>()
+           .HasKey(bp => new { bp.Userid, bp.productid });
+
+
+
+            modelBuilder.Entity<FavoriteProducts>()
+                .HasOne(bp => bp.Userat)
+                .WithMany(b => b.FavoriteProducts)
+                .HasForeignKey(bp => bp.Userid);
+
+            modelBuilder.Entity<FavoriteProducts>()
+                .HasOne(bp => bp.Produktet)
+                .WithMany(p => p.FavoriteProducts)
+                .HasForeignKey(bp => bp.productid);
+
             modelBuilder.Entity<Users>()
            .HasOne(u => u.Basket)
            .WithOne(c => c.users)

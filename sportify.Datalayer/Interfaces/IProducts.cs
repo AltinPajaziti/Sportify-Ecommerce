@@ -20,7 +20,7 @@ namespace sportify.Datalayer.Interfaces
 
 
 
-        Task<List<Products>> FilterProducts(string input, string location, decimal? priceFrom, decimal? priceTo);
+        Task<List<Products>> FilterProducts(FilterProductsDto products);
 
     }
 }
