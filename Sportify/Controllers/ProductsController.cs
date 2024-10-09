@@ -40,6 +40,21 @@ namespace Sportify.Controllers
         }
 
 
+        [HttpPost("AddToFavorites/{productid}") , Authorize]
+        public async Task<IActionResult> AddToFavorites(int productid)
+        {
+            try
+            {
+                await  _products.AddToFav(productid);
+                return  Ok("Okej");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
         [HttpGet("Get-Product-byid")]
         public async Task<ActionResult<List<ProductDto>>> GetProductbyid(Guid id)
         {

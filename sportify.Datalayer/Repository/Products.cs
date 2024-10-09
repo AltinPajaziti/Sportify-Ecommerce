@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Produktet = sportify.core.cs.Products;
@@ -15,11 +17,13 @@ namespace sportify.Datalayer.Repository
     public class Products : IProducts
     {
            public readonly SportifyContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public Products(SportifyContext context)
+        public Products(SportifyContext context , IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _contextAccessor = httpContextAccessor;
         }
 
 
@@ -56,6 +60,8 @@ namespace sportify.Datalayer.Repository
         }
 
 
+     
+
         public async Task<ProductDto> GetProductById(Guid id)
         {
             var product = await _context.products.FirstOrDefaultAsync(p => p.GId == id);
@@ -76,7 +82,89 @@ namespace sportify.Datalayer.Repository
             return null;
         }
 
-        
+        public async Task AddToFav(int productid)
+        {
+            var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var user = await _context.users.Include(u => u.FavoriteProducts).FirstOrDefaultAsync(u => u.id == userid);
+
+
+            if (user == null)
+            {
+                throw new Exception("user is null");
+            }
+
+            var Favoriteprod = user.FavoriteProducts.FirstOrDefault(p => p.id == productid);
+
+            if(Favoriteprod != null)
+            {
+                throw new Exception("the fav prod exists");
+            }
+            else
+            {
+                var Favprod = new FavoriteProducts
+                {
+                    productid = productid,
+                    Userid = userid,
+                };
+                user.FavoriteProducts.Add(Favprod);
+                _context.SaveChangesAsync();
+            }
+
+       
+
+  
+
+
+
+        }
+
+        public async Task<List<Produktet>> GetAllFavoriteProducts()
+        {
+            var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var products =  _context.products.Include(products => products.FavoriteProducts).Where(u => u.id == userid);
+
+            return await products.ToListAsync();
+        }
+
+
+
+        public async Task UpdateFavoriteProduct(ProductDto product , int productid)
+        {
+            var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var products = await _context.users.Include(f => f.FavoriteProducts).FirstOrDefaultAsync(u => u.id == userid);
+
+
+            if(products == null)
+            {
+                throw new Exception("The ser is null");
+            }
+
+            var actualproduct = products.FavoriteProducts.Where(p => p.productid == productid);
+            if(actualproduct != null)
+            {
+                _context.Remove(actualproduct);
+            }
+
+            var newFavoriteProduct = new FavoriteProducts
+            {
+                productid = productid, 
+                Userid = userid
+            };
+
+            products.FavoriteProducts.Add(newFavoriteProduct);
+
+            await _context.SaveChangesAsync();
+
+           
+
+
+
+        }
+
+
 
         public async  Task<Produktet> CreateProduct(ProductDto product)
         {
