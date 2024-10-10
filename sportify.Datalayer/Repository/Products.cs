@@ -108,7 +108,7 @@ namespace sportify.Datalayer.Repository
                     Userid = userid,
                 };
                 user.FavoriteProducts.Add(Favprod);
-                _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
             }
 
        

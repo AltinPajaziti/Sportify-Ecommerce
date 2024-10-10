@@ -40,19 +40,42 @@ namespace Sportify.Controllers
         }
 
 
-        [HttpPost("AddToFavorites/{productid}") , Authorize]
+        [HttpPost("AddToFavorites/{productid}"), Authorize]
         public async Task<IActionResult> AddToFavorites(int productid)
         {
             try
             {
-                await  _products.AddToFav(productid);
-                return  Ok("Okej");
+                var result = _products.AddToFav(productid);
+
+                if (result != null)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Product added to favorites successfully",
+                        ProductId = productid
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        Success = false,
+                        Message = "Failed to add product to favorites"
+                    });
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = $"Internal server error: {ex.Message}"
+                });
             }
         }
+
+
 
 
         [HttpGet("Get-Product-byid")]
