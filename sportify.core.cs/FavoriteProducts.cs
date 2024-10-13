@@ -14,5 +14,7 @@ namespace sportify.core.cs
 
         public Users Userat { get; set; }
         public int Userid { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

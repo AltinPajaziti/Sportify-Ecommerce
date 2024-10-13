@@ -40,12 +40,14 @@ namespace Sportify.Controllers
         }
 
 
-        [HttpPost("AddToFavorites/{productid}"), Authorize]
+        [HttpPost("AddToFavorites/{productid}")]
+        [Authorize]
         public async Task<IActionResult> AddToFavorites(int productid)
         {
             try
             {
-                var result = _products.AddToFav(productid);
+                // Assuming _products.AddToFav is asynchronous
+                var result = await _products.AddToFav(productid);
 
                 if (result != null)
                 {
@@ -74,6 +76,24 @@ namespace Sportify.Controllers
                 });
             }
         }
+
+
+        [HttpGet("Get-All-Favorite-Products") , Authorize]
+
+        public async Task<ActionResult<List<Produktet>>> GetAllFavoriteProducts()
+        {
+            try
+            {
+                var produktet = await _products.GetAllFavoriteProducts();
+
+                return Ok(produktet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
 

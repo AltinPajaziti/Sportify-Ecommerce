@@ -18,7 +18,8 @@ namespace sportify.Datalayer.Interfaces
 
         Task<List<Products>> GetPriceFiltered(PriceProductFilter productPrice);
 
-        Task AddToFav(int productid);
+        Task<bool> AddToFav(int productid);
+        Task<List<ProductDto>> GetAllFavoriteProducts();
 
         Task<List<Products>> FilterProducts(FilterProductsDto products);
 

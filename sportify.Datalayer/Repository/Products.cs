@@ -82,50 +82,66 @@ namespace sportify.Datalayer.Repository
             return null;
         }
 
-        public async Task AddToFav(int productid)
+        public async Task<bool> AddToFav(int productid)
         {
             var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
             var user = await _context.users.Include(u => u.FavoriteProducts).FirstOrDefaultAsync(u => u.id == userid);
 
-
             if (user == null)
             {
-                throw new Exception("user is null");
+                throw new Exception("User not found");
             }
 
-            var Favoriteprod = user.FavoriteProducts.FirstOrDefault(p => p.id == productid);
+            var favoriteProd = user.FavoriteProducts.FirstOrDefault(p => p.productid == productid);
 
-            if(Favoriteprod != null)
+            if (favoriteProd != null)
             {
-                throw new Exception("the fav prod exists");
+                favoriteProd.Quantity++;
+                await _context.SaveChangesAsync();
+
+                return true;
             }
-            else
+
+            var newFavProd = new FavoriteProducts
             {
-                var Favprod = new FavoriteProducts
-                {
-                    productid = productid,
-                    Userid = userid,
-                };
-                user.FavoriteProducts.Add(Favprod);
-                 await _context.SaveChangesAsync();
-            }
+                productid = productid,
+                Userid = userid,
+                Quantity = 1
+            };
+            user.FavoriteProducts.Add(newFavProd);
 
-       
+            await _context.SaveChangesAsync();
 
-  
-
-
-
+            return true; 
         }
 
-        public async Task<List<Produktet>> GetAllFavoriteProducts()
+
+        public async Task<List<ProductDto>> GetAllFavoriteProducts()
         {
             var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
-            var products =  _context.products.Include(products => products.FavoriteProducts).Where(u => u.id == userid);
+            if(userid == null)
+            {
+                throw new Exception("The userid is null");
+            }
+            var products = await _context.products.Include(products => products.FavoriteProducts)
+                .Where(products => products.FavoriteProducts
+                .Any(fp=> fp.Userid == userid)).ToListAsync();
 
-            return await products.ToListAsync();
+            var FinalProducts = products.Select(p => new ProductDto
+            {
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price
+            }).ToList();
+
+
+
+
+
+            return FinalProducts.Count > 0 ? FinalProducts : new List<ProductDto>();
+
         }
 
 
