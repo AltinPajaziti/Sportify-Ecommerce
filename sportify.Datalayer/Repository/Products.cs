@@ -133,7 +133,10 @@ namespace sportify.Datalayer.Repository
             {
                 Name = p.Name,
                 Description = p.Description,
-                Price = p.Price
+                Price = p.Price,
+                Photo = p.Photo,
+                
+
             }).ToList();
 
 
@@ -182,23 +185,47 @@ namespace sportify.Datalayer.Repository
 
 
 
-        public async  Task<Produktet> CreateProduct(ProductDto product)
+        public async Task<Produktet> CreateProduct(ProductDto productDto)
         {
-            if(product != null)
+            if (productDto != null)
             {
-                var Produkti = new Produktet
+                var existingProduct = await _context.products
+                    .Include(p => p.stock)
+                    .FirstOrDefaultAsync(p => p.id == productDto.id);
+
+                if (existingProduct != null)
                 {
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Photo = product.Photo
+                    if (existingProduct.stock != null)
+                    {
+                        existingProduct.stock.Quantity = productDto.StockQuantity;
+                    }
+                }
+                else
+                {
+                    var newStock = new Stock
+                    {
+                        Quantity = productDto.StockQuantity
+                    };
 
-                };
+                    var newProduct = new Produktet
+                    {
+                        Name = productDto.Name,
+                        Description = productDto.Description,
+                        Price = productDto.Price,
+                        Photo = productDto.Photo,
+                        stock = newStock 
+                    };
 
-                await _context.products.AddAsync(Produkti);
-                await _context.SaveChangesAsync(); 
+                    await _context.products.AddAsync(newProduct);
 
-                return  Produkti;
+                    await _context.SaveChangesAsync();
+
+                    newProduct.Stockid = newStock.Stockid; 
+                }
+
+                await _context.SaveChangesAsync();
+
+                return existingProduct;
             }
 
             return null;
@@ -233,7 +260,7 @@ namespace sportify.Datalayer.Repository
             var query = _context.products.AsQueryable();
             if (!string.IsNullOrEmpty(products.Input))
             {
-                query = query.Where(p => p.Name.Contains(products.Input) || p.Description.Contains(products.Input));
+                query = query.Where(p => p.Name.Contains(products.Input));
             }
 
             //if (!string.IsNullOrEmpty(location))
@@ -241,12 +268,12 @@ namespace sportify.Datalayer.Repository
             //    query = query.Where(p => p.Location == location);
             //}
 
-            if (products.PriceFrom.HasValue)
+            if (products.PriceFrom !=0)
             {
                 query = query.Where(p => p.Price >= products.PriceFrom.Value);
             }
 
-            if (products.PriceTo.HasValue)
+            if (products.PriceTo != 0)
             {
                 query = query.Where(p => p.Price <= products.PriceTo.Value);
             }

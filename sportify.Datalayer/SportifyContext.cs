@@ -20,6 +20,7 @@ namespace sportify.Datalayer
         public DbSet<Category> category { get; set; }
         public DbSet<Basket> basket { get; set; }
         public DbSet<Roles> Roles { get; set; }
+        public DbSet<Stock> stock { get; set; }
 
 
         public SportifyContext( DbContextOptions<SportifyContext> options) : base(options)
@@ -57,6 +58,11 @@ namespace sportify.Datalayer
             modelBuilder.Entity<FavoriteProducts>()
            .HasKey(bp => new { bp.Userid, bp.productid });
 
+            modelBuilder.Entity<Products>()
+                  .HasOne(p => p.stock)  
+                  .WithOne(s => s.Product)  
+                  .HasForeignKey<Stock>(s => s.ProductId)  
+                  .OnDelete(DeleteBehavior.Restrict); 
 
 
             modelBuilder.Entity<FavoriteProducts>()

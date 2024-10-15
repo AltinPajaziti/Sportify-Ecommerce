@@ -46,7 +46,7 @@ namespace Sportify.Controllers
         {
             try
             {
-                // Assuming _products.AddToFav is asynchronous
+                
                 var result = await _products.AddToFav(productid);
 
                 if (result != null)

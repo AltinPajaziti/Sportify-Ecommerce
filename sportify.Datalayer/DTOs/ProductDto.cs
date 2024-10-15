@@ -14,8 +14,7 @@ namespace sportify.Datalayer.DTOs
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string? Token { get; set; }
-        public int? qty { get; set; }
-
+        public int StockQuantity { get; set; } = 0;
         public string Photo { get; set; }
 
     }
