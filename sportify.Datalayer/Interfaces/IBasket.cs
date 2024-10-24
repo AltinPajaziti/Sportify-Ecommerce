@@ -13,5 +13,6 @@ namespace sportify.Datalayer.Interfaces
         Task<ProductDto> AddToBasket(ProductDto product);
 
         Task<bool> DeleteProduct(int pid);
+        Task<ProductDto> BuyProduct(ProductDto product);
     }
 }

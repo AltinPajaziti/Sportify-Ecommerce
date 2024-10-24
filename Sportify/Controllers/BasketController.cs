@@ -37,6 +37,24 @@ namespace Sportify.Controllers
         }
 
 
+        [HttpPost("Buy-Product"), Authorize]
+        public async Task<IActionResult> BuyProduct([FromBody] ProductDto product)
+        {
+            try
+            {
+                var rez = await _basket.BuyProduct(product);
+                return Ok(rez);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException?.Message);
+
+                throw;
+            }
+        }
+
+
         [HttpDelete("Delete-Product"), Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {

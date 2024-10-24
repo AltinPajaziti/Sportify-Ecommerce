@@ -23,5 +23,7 @@ namespace sportify.Datalayer.Interfaces
 
         Task<List<Products>> FilterProducts(FilterProductsDto products);
 
+
+
     }
 }

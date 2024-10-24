@@ -263,10 +263,22 @@ namespace sportify.Datalayer.Repository
                 query = query.Where(p => p.Name.Contains(products.Input));
             }
 
-            //if (!string.IsNullOrEmpty(location))
-            //{
-            //    query = query.Where(p => p.Location == location);
-            //}
+            if(products.sortby != null)
+            {
+                if(products.sortby.ToLower() == "asc")
+                {
+                    query = query.OrderBy(p => p.Name);
+
+                }
+
+                if(products.sortby.ToLower() == "desc")
+                {
+                    query = query.OrderByDescending(p => p.Name);   
+                }
+            }
+
+
+
 
             if (products.PriceFrom !=0)
             {

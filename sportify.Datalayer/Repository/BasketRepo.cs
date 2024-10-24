@@ -28,71 +28,73 @@ namespace sportify.Datalayer.Repository
             _contextAccessor = httpContextAccessor;
 
         }
-        public async Task<ProductDto> AddToBasket(ProductDto product)
-        {
-            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
-                       .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        //public async Task<ProductDto> AddToBasket(ProductDto product)
+        //{
+        //    var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+        //               .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
-            {
-                throw new Exception("User ID not found in claims.");
-            }
-            var userExists = await _context.users.AnyAsync(u => u.id == Userid);
-            if (!userExists)
-            {
-                throw new Exception("User does not exist");
-            }
+        //    if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+        //    {
+        //        throw new Exception("User ID not found in claims.");
+        //    }
+        //    var userExists = await _context.users.AnyAsync(u => u.id == Userid);
+        //    if (!userExists)
+        //    {
+        //        throw new Exception("User does not exist");
+        //    }
 
-            var existingBasket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(b => b.userid == Userid);
-            if (existingBasket == null)
-            {
-              var newbasket = new Basket
-                {
+        //    var existingBasket = _context.basket.Include(b => b.BasketProducts).FirstOrDefault(b => b.userid == Userid);
+        //    if (true)
+        //    {
+        //      var newbasket = new Basket
+        //        {
                   
-                    userid = Userid,
-                    BasketProducts = new List<BasketProduct>()
-                };
-                _context.basket.Add(newbasket);
+        //            userid = Userid,
+        //            BasketProducts = new List<BasketProduct>()
+        //        };
+        //        _context.basket.Add(newbasket);
 
 
-                var newBasketProduct = new BasketProduct
-                    {
-                        BasketId = newbasket.id,
-                        Productid = product.id,
-                        Qty = 1
-                    };
-                newbasket.BasketProducts.Add(newBasketProduct);          
+        //        var newBasketProduct = new BasketProduct
+        //            {
+        //                BasketId = newbasket.id,
+        //                Productid = product.id,
+        //                Qty = 1,
+                        
+                        
+        //            };
+        //        newbasket.BasketProducts.Add(newBasketProduct);          
 
-            }
-            else
-            {
-                var productExists = existingBasket.BasketProducts.FirstOrDefault(bp => bp.Productid == product.id);
+        //    }
+        //    else
+        //    {
+        //        var productExists = existingBasket.BasketProducts.FirstOrDefault(bp => bp.Productid == product.id);
 
-                if (productExists == null)
-                {
-                    var newBasketProduct = new BasketProduct
-                    {
-                        BasketId = existingBasket.id,
-                        Productid = product.id,
-                        Qty = 1
-                    };
-                    existingBasket.BasketProducts.Add(newBasketProduct);
-                }
-                else
-                {
-                    productExists.Qty += 1;
-                }
+        //        if (productExists == null)
+        //        {
+        //            var newBasketProduct = new BasketProduct
+        //            {
+        //                BasketId = existingBasket.id,
+        //                Productid = product.id,
+        //                Qty = 1
+        //            };
+        //            existingBasket.BasketProducts.Add(newBasketProduct);
+        //        }
+        //        else
+        //        {
+        //            productExists.Qty += 1;
+        //        }
 
-            }
+        //    }
 
            
             
 
 
-            await _context.SaveChangesAsync();
+        //    await _context.SaveChangesAsync();
 
-            return product; 
-        }
+        //    return product; 
+        //}
 
         public async Task<bool>  DeleteProduct(int pid)
         {
@@ -167,6 +169,110 @@ namespace sportify.Datalayer.Repository
 
         }
 
+        public async Task<ProductDto> BuyProduct(ProductDto product)
+        {
+
+            this.AddToBasket(product);
+
+            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+                      .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+            {
+                throw new Exception("User ID not found in claims.");
+
+            }
+
+            var basket = await _context.basket
+                .Include(b => b.BasketProducts)
+                .FirstOrDefaultAsync(b => b.userid == Userid);
+
+            if (basket == null)
+            {
+                throw new Exception("Basket not found for user.");
+            }
+
+            var test = basket.BasketProducts.FirstOrDefault(p => p.Productid == product.id);
+
+
+
+            await _context.SaveChangesAsync();
+
+
+            return product;
+
+
+
+
+        }
+        //{ }
+
+
+        public async Task<ProductDto> AddToBasket(ProductDto product)
+        {
+            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+            {
+                throw new Exception("User ID not found in claims.");
+            }
+
+            var existingProduct = await _context.products
+                .Include(p => p.stock)
+                .FirstOrDefaultAsync(p => p.id == product.id);
+
+            if (existingProduct == null || existingProduct.stock == null || existingProduct.stock.Quantity < 1)
+            {
+                throw new Exception("The product is either out of stock or does not exist.");
+            }
+
+            var existingBasket = await _context.basket
+                .Include(b => b.BasketProducts)
+                .FirstOrDefaultAsync(b => b.userid == Userid);
+
+            if (existingBasket != null)
+            {
+                var existingBasketProduct = existingBasket.BasketProducts
+                    .FirstOrDefault(bp => bp.Productid == product.id);
+
+                if (existingBasketProduct != null)
+                {
+                    existingBasketProduct.Qty += 1;
+                }
+                else
+                {
+                    existingBasket.BasketProducts.Add(new BasketProduct
+                    {
+                        Productid = product.id,
+                        Qty = 1
+                    });
+                }
+            }
+            else
+            {
+                var newBasket = new Basket
+                {
+                    userid = Userid,
+                    BasketProducts = new List<BasketProduct>
+            {
+                new BasketProduct
+                {
+                    Productid = product.id,
+                    Qty = 1
+                }
+            }
+                };
+                _context.basket.Add(newBasket);
+            }
+
+            existingProduct.stock.Quantity -= 1;
+            _context.products.Update(existingProduct); 
+
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
 
 
         //  public async Task<Products> UpdateProduct(int id, ProductDto newproduct)
@@ -200,6 +306,8 @@ namespace sportify.Datalayer.Repository
 
         //  //    return product;
         //  }
+
+
 
     }
 }

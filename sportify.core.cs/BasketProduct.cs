@@ -18,6 +18,8 @@ namespace sportify.core.cs
         public int Productid { get; set; }
         public Products products { get; set; }
 
+
+
         public int Qty { get; set; }
 
     }
