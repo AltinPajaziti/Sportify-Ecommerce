@@ -283,25 +283,13 @@ namespace sportify.Datalayer.Repository
                 query = query.Where(p => p.Name.Contains(products.Input));
             }
 
-            if (products.sortby != null)
-            {
-                if (products.sortby.ToLower() == "asc")
-                {
-                    query = query.OrderBy(p => p.Name);
-
-                }
-
-                if (products.sortby.ToLower() == "desc")
-                {
-                    query = query.OrderByDescending(p => p.Name);
-                }
-            }
-
             if(products.Categoryid != null)
             {
-                query = query.Where(p => p.Category.id == products.Categoryid);
+                query = query.Where(p => p.Category.id == int.Parse(products.Categoryid));
+
             }
 
+          
 
 
 
@@ -364,5 +352,20 @@ namespace sportify.Datalayer.Repository
             }
         }
 
+        public async Task<int> Getpurchedcount()
+        {
+
+
+
+            var userid = Int32.Parse(_contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+
+            var purchedcount = await _context.basket.Where(b => b.userid == userid).Include(b => b.BasketProducts).Select(b => b.BasketProducts.Where(x => x.BasketId ==b.id)).ToListAsync();
+
+
+          
+
+            return purchedcount.Count ;
+        }
     }
 }

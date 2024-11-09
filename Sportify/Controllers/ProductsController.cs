@@ -115,7 +115,22 @@ namespace Sportify.Controllers
         }
 
 
+        [HttpGet("Getpurchedcount") , Authorize]
 
+        public async Task<IActionResult> Getpurchedcount()
+        {
+            try
+            {
+                var favoritecount = await _products.Getpurchedcount();
+
+                return Ok(favoritecount);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
 
         [HttpGet("Get-Product-byid")]

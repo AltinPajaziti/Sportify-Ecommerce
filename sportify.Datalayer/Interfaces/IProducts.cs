@@ -30,6 +30,11 @@ namespace sportify.Datalayer.Interfaces
 
         Task<bool> DeleteFavProduct(int productid);
 
+        Task<int> Getpurchedcount();
+
+
+        
+
 
 
     }
