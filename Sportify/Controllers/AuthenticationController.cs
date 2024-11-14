@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using sportify.core.cs;
+using sportify.Datalayer;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
+using sportify.Datalayer.Repository;
+using System.Security.Claims;
 
 namespace Sportify.Controllers
 {
@@ -11,11 +16,18 @@ namespace Sportify.Controllers
     public class AuthenticationController : ControllerBase
     {
         public Authentication _Authentication;
+        private SportifyContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IToken _token;
 
 
-        public AuthenticationController(Authentication Authentication)
+
+        public AuthenticationController(Authentication Authentication , SportifyContext context, IHttpContextAccessor httpContextAccessor, IToken token)
         {
             _Authentication = Authentication;
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+           _token = token;
         }
 
 
@@ -47,8 +59,6 @@ namespace Sportify.Controllers
             }
         }
 
-
-
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -72,6 +82,30 @@ namespace Sportify.Controllers
             {
                 return Unauthorized(ex.Message);
             }
+        }
+
+        [HttpPost("refresh-token"),Authorize]
+        public async Task<ActionResult<string>> RefreshToken()
+        {
+
+            var userid = Int32.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var user = await _context.users.Where(u => u.id == userid).FirstOrDefaultAsync();
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (!user.RefreshToken.Equals(refreshToken))
+            {
+                return Unauthorized("Invalid Refresh Token.");
+            }
+            else if (user.TokenExpires < DateTime.Now)
+            {
+                return Unauthorized("Token expired.");
+            }
+
+            string token = _token.CreateToken(user);
+            var newRefreshToken = await _Authentication.GenerateRefreshToken();
+            _Authentication.SetRefreshToken(newRefreshToken , user);
+
+            return Ok(token);
         }
 
 

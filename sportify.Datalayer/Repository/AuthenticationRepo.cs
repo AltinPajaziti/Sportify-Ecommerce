@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,15 +19,68 @@ namespace sportify.Datalayer.Repository
     public class AuthenticationRepo : Authentication
     {
         private SportifyContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public IToken _Token { get; set; }
          
 
-        public AuthenticationRepo(SportifyContext context, IToken Token)
+        public AuthenticationRepo(SportifyContext context, IToken Token , IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _Token = Token;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
+
+        public Task<RefreshToken> GenerateRefreshToken()
+{
+            var refreshtoken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                TokenExpires = DateTime.UtcNow.AddMinutes(60),
+                TokenCreated = DateTime.Now
+            };
+
+            // Return the refresh token wrapped in a completed Task
+            return Task.FromResult(refreshtoken);
+        }
+
+
+
+        private bool ValidateRefreshToken(string token)
+        {
+            
+            return !string.IsNullOrEmpty(token); 
+        }
+
+        private void RefreshAccessToken(string refreshToken)
+        {
+            Console.WriteLine($"Access token refreshed using the refresh token: {refreshToken}");
+        }
+
+
+        public void SetRefreshToken(RefreshToken refreshToken , Users user)
+        {
+            if (refreshToken == null)
+                throw new ArgumentNullException(nameof(refreshToken));
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, 
+                Expires = refreshToken.TokenExpires, 
+                SameSite = SameSiteMode.Strict 
+            };
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshtoken", refreshToken.Token, cookieOptions);
+
+            user.RefreshToken = refreshToken.Token;
+            user.TokenExpires = refreshToken.TokenExpires;
+            user.TokenCreated = refreshToken.TokenCreated;
+          
+
+        }
 
 
         public async Task<LoginUserDto> LoginAsync(LoginDto loginDto)
@@ -47,17 +105,54 @@ namespace sportify.Datalayer.Repository
                 }
             }
 
+     
+
+            var refreshToken = await GenerateRefreshToken();  
+
 
             var loginUserDto = new LoginUserDto
             {
                 Username = loginDto.Username,
                 Token = _Token.CreateToken(User),
                 Role = (User.Roleid == 1003) ? "Admin" : "User",
+                
+
+
+
 
                 Status = "ok"
             };
 
+            SetrefreshToken(refreshToken, loginUserDto);
+
+
+
+
+
+
             return loginUserDto;
+
+        }
+
+
+        public void SetrefreshToken(RefreshToken refreshToken, LoginUserDto user)
+        {
+            if (refreshToken == null)
+                throw new ArgumentNullException(nameof(refreshToken));
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = refreshToken.TokenExpires,
+                SameSite = SameSiteMode.Strict
+            };
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshtoken", refreshToken.Token, cookieOptions);
+
+            user.RefreshToken = refreshToken.Token;
+            user.TokenExpires = refreshToken.TokenExpires;
+            user.TokenCreated = refreshToken.TokenCreated;
 
         }
 
@@ -91,5 +186,7 @@ namespace sportify.Datalayer.Repository
 
             return  Register;
         }
+
+       
     }
 }

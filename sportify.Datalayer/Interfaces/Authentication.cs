@@ -13,6 +13,11 @@ namespace sportify.Datalayer.Interfaces
 
         public Task<LoginUserDto> LoginAsync(LoginDto loginDto);
         public Task<Users> RegisterAsync( RegisterDto register);
+        public Task<RefreshToken> GenerateRefreshToken();
+        void SetRefreshToken(RefreshToken refreshToken, Users user);
+
+        void SetrefreshToken(RefreshToken refreshToken, LoginUserDto user);
+
 
 
     }

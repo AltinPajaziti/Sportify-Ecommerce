@@ -13,5 +13,11 @@ namespace sportify.Datalayer.DTOs
 
         public string Status { get; set; } = string.Empty;
         public string Role { get; set; }
+
+        public string RefreshToken { get; set; } = string.Empty ;
+
+        public DateTime  TokenCreated { get; set; }
+
+        public DateTime TokenExpires { get; set; }
     }
 }

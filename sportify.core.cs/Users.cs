@@ -25,6 +25,12 @@ namespace sportify.core.cs
 
         public Basket Basket { get; set; }
 
+        public string RefreshToken { get; set; } = string.Empty;
+
+        public DateTime TokenCreated { get; set; }
+
+        public DateTime TokenExpires { get; set; }
+
 
         public ICollection<FavoriteProducts> FavoriteProducts { get; set; }
 
