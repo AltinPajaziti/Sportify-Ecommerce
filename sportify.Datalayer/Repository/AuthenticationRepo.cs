@@ -38,11 +38,10 @@ namespace sportify.Datalayer.Repository
             var refreshtoken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                TokenExpires = DateTime.UtcNow.AddMinutes(60),
+                TokenExpires = DateTime.UtcNow.AddDays(7),
                 TokenCreated = DateTime.Now
             };
 
-            // Return the refresh token wrapped in a completed Task
             return Task.FromResult(refreshtoken);
         }
 
@@ -60,7 +59,7 @@ namespace sportify.Datalayer.Repository
         }
 
 
-        public void SetRefreshToken(RefreshToken refreshToken , Users user)
+        public async void SetRefreshToken(RefreshToken refreshToken , Users user)
         {
             if (refreshToken == null)
                 throw new ArgumentNullException(nameof(refreshToken));
@@ -78,6 +77,8 @@ namespace sportify.Datalayer.Repository
             user.RefreshToken = refreshToken.Token;
             user.TokenExpires = refreshToken.TokenExpires;
             user.TokenCreated = refreshToken.TokenCreated;
+
+             await _context.SaveChangesAsync();
           
 
         }
@@ -135,7 +136,7 @@ namespace sportify.Datalayer.Repository
         }
 
 
-        public void SetrefreshToken(RefreshToken refreshToken, LoginUserDto user)
+        public async void SetrefreshToken(RefreshToken refreshToken, LoginUserDto user)
         {
             if (refreshToken == null)
                 throw new ArgumentNullException(nameof(refreshToken));
@@ -147,12 +148,21 @@ namespace sportify.Datalayer.Repository
                 Expires = refreshToken.TokenExpires,
                 SameSite = SameSiteMode.Strict
             };
+            var Theuser = _context.users.Where(u => u.Name == user.Username).FirstOrDefault();
 
             _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshtoken", refreshToken.Token, cookieOptions);
+
+            Theuser.RefreshToken = refreshToken.Token;
+            Theuser.TokenExpires = refreshToken.TokenExpires;
+            Theuser.TokenCreated = refreshToken.TokenCreated;
+
+            await _context.SaveChangesAsync();
 
             user.RefreshToken = refreshToken.Token;
             user.TokenExpires = refreshToken.TokenExpires;
             user.TokenCreated = refreshToken.TokenCreated;
+
+
 
         }
 

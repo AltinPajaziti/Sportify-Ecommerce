@@ -87,10 +87,9 @@ namespace Sportify.Controllers
         [HttpPost("refresh-token"),Authorize]
         public async Task<ActionResult<string>> RefreshToken()
         {
-
             var userid = Int32.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            var user = await _context.users.Where(u => u.id == userid).FirstOrDefaultAsync();
-            var refreshToken = Request.Cookies["refreshToken"];
+            var user = await _context.users.Include(ur => ur.Roli).Where(u => u.id == userid).FirstOrDefaultAsync();
+            var refreshToken = Request.Cookies["refreshtoken"];
 
             if (!user.RefreshToken.Equals(refreshToken))
             {
@@ -101,9 +100,10 @@ namespace Sportify.Controllers
                 return Unauthorized("Token expired.");
             }
 
+
             string token = _token.CreateToken(user);
             var newRefreshToken = await _Authentication.GenerateRefreshToken();
-            _Authentication.SetRefreshToken(newRefreshToken , user);
+            _Authentication.SetRefreshToken(newRefreshToken, user);
 
             return Ok(token);
         }

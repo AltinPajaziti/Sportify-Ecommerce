@@ -60,7 +60,7 @@ namespace sportify.Datalayer.Repository
             var distributor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = creds
 
             };
