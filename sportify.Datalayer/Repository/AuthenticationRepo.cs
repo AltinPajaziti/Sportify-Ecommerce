@@ -115,7 +115,7 @@ namespace sportify.Datalayer.Repository
             {
                 Username = loginDto.Username,
                 Token = _Token.CreateToken(User),
-                Role = (User.Roleid == 1003) ? "Admin" : "User",
+                Role = (User.Roleid == 2) ? "Admin" : "User",
                 
 
 
@@ -156,7 +156,7 @@ namespace sportify.Datalayer.Repository
             Theuser.TokenExpires = refreshToken.TokenExpires;
             Theuser.TokenCreated = refreshToken.TokenCreated;
 
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
 
             user.RefreshToken = refreshToken.Token;
             user.TokenExpires = refreshToken.TokenExpires;
