@@ -59,6 +59,7 @@ builder.Services.AddScoped<IProducts, Products>();
 builder.Services.AddScoped<Authentication, AuthenticationRepo>();
 builder.Services.AddScoped<IBasket , BasketRepo>();
 builder.Services.AddScoped<ICategory, CategoryRepo>();  
+builder.Services.AddScoped<IOrders , OrdersRepo>();
 
 var tokenKey = builder.Configuration.GetValue<string>("TokenKey");
 
