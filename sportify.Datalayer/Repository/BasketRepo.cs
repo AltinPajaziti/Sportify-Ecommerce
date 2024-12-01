@@ -292,7 +292,7 @@ namespace sportify.Datalayer.Repository
                     Name = bp.products.Name,
                     Description = bp.products.Description,
                     Price = bp.products.Price,
-                    StockQuantity = bp.products.stock.Quantity,
+                    StockQuantity = bp.Qty,
                     Photo = bp.products.Photo
                 })
                 .ToListAsync();

@@ -39,7 +39,7 @@ namespace Sportify.Controllers
 
 
 
-        [HttpDelete("Delete-Product/{id}"), Authorize]
+        [HttpDelete("Delete-Product/{id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {
             try
