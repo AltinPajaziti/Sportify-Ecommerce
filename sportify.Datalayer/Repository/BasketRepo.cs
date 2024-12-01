@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using sportify.core.cs;
 using sportify.Datalayer.DTOs;
@@ -48,7 +51,7 @@ namespace sportify.Datalayer.Repository
         //    {
         //      var newbasket = new Basket
         //        {
-                  
+
         //            userid = Userid,
         //            BasketProducts = new List<BasketProduct>()
         //        };
@@ -60,8 +63,8 @@ namespace sportify.Datalayer.Repository
         //                BasketId = newbasket.id,
         //                Productid = product.id,
         //                Qty = 1,
-                        
-                        
+
+
         //            };
         //        newbasket.BasketProducts.Add(newBasketProduct);          
 
@@ -87,8 +90,8 @@ namespace sportify.Datalayer.Repository
 
         //    }
 
-           
-            
+
+
 
 
         //    await _context.SaveChangesAsync();
@@ -96,7 +99,7 @@ namespace sportify.Datalayer.Repository
         //    return product; 
         //}
 
-        public async Task<bool>  DeleteProduct(int pid)
+        public async Task<bool> DeleteProduct(int pid)
         {
             var UseridClaim = _contextAccessor.HttpContext?.User.Claims
                       .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -111,15 +114,15 @@ namespace sportify.Datalayer.Repository
 
             var product = existingbucket.BasketProducts.FirstOrDefault(p => p.Productid == pid);
 
-          
-                existingbucket.BasketProducts.Remove(product);
-                if(existingbucket.BasketProducts.Count == 0)
-                {
-                    _context.basket.Remove(existingbucket);
-                }
 
-               
-            
+            existingbucket.BasketProducts.Remove(product);
+            if (existingbucket.BasketProducts.Count == 0)
+            {
+                _context.basket.Remove(existingbucket);
+            }
+
+
+
 
             await _context.SaveChangesAsync();
             return true;
@@ -135,15 +138,15 @@ namespace sportify.Datalayer.Repository
         {
             var userid = 22;
 
-            var user = await  _context.users.Include(fp => fp.FavoriteProducts).FirstOrDefaultAsync(fb => fb.id == userid);
+            var user = await _context.users.Include(fp => fp.FavoriteProducts).FirstOrDefaultAsync(fb => fb.id == userid);
             if (userid == null)
             {
                 return false;
             }
 
-            var FavoriteProduckt = user.FavoriteProducts.Any( p => p.productid == Productid );
+            var FavoriteProduckt = user.FavoriteProducts.Any(p => p.productid == Productid);
 
-            if(FavoriteProduckt != null)
+            if (FavoriteProduckt != null)
             {
                 return false;
             }
@@ -164,8 +167,6 @@ namespace sportify.Datalayer.Repository
 
 
         }
-
-    
 
         public async Task<ProductDto> BuyProduct(ProductDto product)
         {
@@ -238,8 +239,8 @@ namespace sportify.Datalayer.Repository
                 {
                     existingBasketProduct.Qty += 1;
                     existingBasketProduct.IsPurchased = true;
-                    
-                    
+
+
                 }
                 else
                 {
@@ -270,12 +271,62 @@ namespace sportify.Datalayer.Repository
             }
 
             existingProduct.stock.Quantity -= 1;
-            _context.products.Update(existingProduct); 
+            _context.products.Update(existingProduct);
 
             await _context.SaveChangesAsync();
 
             return product;
         }
+
+        public async Task<List<ProductDto>> GetAllPurchasedProductsAsync()
+        {
+            var purchasedProducts = await _context.users
+                .Include(u => u.Basket)
+                .ThenInclude(b => b.BasketProducts)
+                .ThenInclude(bp => bp.products)
+                .Where(u => u.Basket.BasketProducts.Any(bp => bp.IsPurchased == true))
+                .SelectMany(u => u.Basket.BasketProducts.Where(bp => bp.IsPurchased == true))
+                .Select(bp => new ProductDto
+                {
+                    id = bp.products.id,
+                    Name = bp.products.Name,
+                    Description = bp.products.Description,
+                    Price = bp.products.Price,
+                    StockQuantity = bp.products.stock.Quantity,
+                    Photo = bp.products.Photo
+                })
+                .ToListAsync();
+
+            return purchasedProducts;
+        }
+
+        public async Task<bool> DeleteBoughtProduct(int pid)
+        {
+            var basket = await _context.basket
+                .Include(b => b.BasketProducts)
+                .FirstOrDefaultAsync(b => b.BasketProducts.Any(bp => bp.Productid == pid));
+
+            if (basket == null)
+            {
+                return false;
+            }
+
+            var productToRemove = basket.BasketProducts.FirstOrDefault(bp => bp.Productid == pid);
+            if (productToRemove != null)
+            {
+                basket.BasketProducts.Remove(productToRemove);
+            }
+
+            if (!basket.BasketProducts.Any())
+            {
+                _context.basket.Remove(basket);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
 
 
         //  public async Task<Products> UpdateProduct(int id, ProductDto newproduct)

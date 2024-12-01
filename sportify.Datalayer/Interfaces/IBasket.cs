@@ -1,4 +1,6 @@
-﻿using sportify.core.cs;
+﻿
+
+using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using System;
 using System.Collections.Generic;
@@ -14,5 +16,11 @@ namespace sportify.Datalayer.Interfaces
 
         Task<bool> DeleteProduct(int pid);
         Task<ProductDto> BuyProduct(ProductDto product);
+
+        Task<List<ProductDto>> GetAllPurchasedProductsAsync();
+
+        Task<bool> DeleteBoughtProduct(int pid);
+
+
     }
 }
