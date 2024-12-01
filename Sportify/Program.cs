@@ -60,6 +60,9 @@ builder.Services.AddScoped<Authentication, AuthenticationRepo>();
 builder.Services.AddScoped<IBasket , BasketRepo>();
 builder.Services.AddScoped<ICategory, CategoryRepo>();  
 builder.Services.AddScoped<IOrders , OrdersRepo>();
+builder.Services.AddScoped<Iusers , UsersRepository>();
+
+
 
 var tokenKey = builder.Configuration.GetValue<string>("TokenKey");
 
