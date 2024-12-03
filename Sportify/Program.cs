@@ -61,6 +61,8 @@ builder.Services.AddScoped<IBasket , BasketRepo>();
 builder.Services.AddScoped<ICategory, CategoryRepo>();  
 builder.Services.AddScoped<IOrders , OrdersRepo>();
 builder.Services.AddScoped<Iusers , UsersRepository>();
+builder.Services.AddScoped<IStockManagment, GetAllproducts>();
+
 
 
 
