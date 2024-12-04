@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using sportify.core.cs;
 using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 using System;
@@ -21,6 +23,38 @@ namespace sportify.Datalayer.Repository
             _context = context; 
         }
 
+        public async Task  AddStock(int productid, int stock)
+        {
+
+            var product = await _context.products.Where(p => p.id == productid).FirstOrDefaultAsync();
+
+
+            if (product != null)
+            {
+               var productstock =  await _context.products.Include(p => p.stock).Where(p => p.stock.ProductId == productid).FirstOrDefaultAsync();
+
+                if(productstock != null)
+                {
+                    productstock.stock.Quantity = stock;
+                }
+                else
+                {
+                    var newstock = new Stock
+                    {
+                        Product = product,
+                        ProductId = productid,
+                        Quantity = stock
+                    };
+
+                     _context.stock.Add(newstock);
+                }
+
+               
+            }
+            await _context.SaveChangesAsync();
+
+
+        }
 
         public async Task<List<StockProductDto>> GetAllProductsAsync()
         {

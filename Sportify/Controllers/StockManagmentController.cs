@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using sportify.Datalayer.DTOs;
 using sportify.Datalayer.Interfaces;
 
 namespace Sportify.Controllers
@@ -31,6 +32,24 @@ namespace Sportify.Controllers
                 return BadRequest(ex.Message);  
             }
 
+        }
+
+
+        [HttpPost("Add-stock")]
+
+        public async Task<IActionResult> AddStock(AddStockDto stock)
+        {
+
+            try
+            {
+                var addstock =  _stockManagment.AddStock(stock.Productid, stock.Stock);
+                return Ok(addstock);
+            }
+
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
