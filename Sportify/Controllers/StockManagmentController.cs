@@ -36,21 +36,30 @@ namespace Sportify.Controllers
 
 
         [HttpPost("Add-stock")]
-
         public async Task<IActionResult> AddStock(AddStockDto stock)
         {
+            if (stock == null || stock.Productid <= 0 || stock.Stock <= 0)
+            {
+                return BadRequest("Invalid input data. Please provide valid product ID and stock quantity.");
+            }
 
             try
             {
-                var addstock =  _stockManagment.AddStock(stock.Productid, stock.Stock);
-                return Ok(addstock);
+                Console.WriteLine($"AddStock called with ProductId: {stock.Productid}, Stock: {stock.Stock}");
+                await _stockManagment.AddStock(stock.Productid, stock.Stock);
+                return Ok(new { message = "Product stock added successfully." });
             }
-
-            catch(Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in controller: {ex.Message}\n{ex.StackTrace}");
+                return StatusCode(500, "An error occurred while adding stock.");
+            }
         }
+
 
     }
 }

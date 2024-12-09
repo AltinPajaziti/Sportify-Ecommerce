@@ -61,10 +61,10 @@ namespace sportify.Datalayer
            .HasKey(bp => new { bp.Userid, bp.productid });
 
             modelBuilder.Entity<Products>()
-                  .HasOne(p => p.stock)  
-                  .WithOne(s => s.Product)  
-                  .HasForeignKey<Stock>(s => s.ProductId)  
-                  .OnDelete(DeleteBehavior.Restrict); 
+                .HasOne(p => p.stock)
+                .WithOne(s => s.Product)
+                .HasForeignKey<Stock>(s => s.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<FavoriteProducts>()

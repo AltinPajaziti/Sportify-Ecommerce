@@ -23,38 +23,49 @@ namespace sportify.Datalayer.Repository
             _context = context; 
         }
 
-        public async Task  AddStock(int productid, int stock)
+        public async Task AddStock(int productid, int stock)
         {
-
-            var product = await _context.products.Where(p => p.id == productid).FirstOrDefaultAsync();
-
-
-            if (product != null)
+            try
             {
-               var productstock =  await _context.products.Include(p => p.stock).Where(p => p.stock.ProductId == productid).FirstOrDefaultAsync();
-
-                if(productstock != null)
+                // Find the product
+                var product = await _context.products.FirstOrDefaultAsync(p => p.id == productid);
+                if (product == null)
                 {
-                    productstock.stock.Quantity = stock;
+                    throw new ArgumentException($"Product with ID {productid} does not exist.");
+                }
+
+                // Find the stock entry
+                var productStock = await _context.stock.FirstOrDefaultAsync(s => s.ProductId == productid);
+                if (productStock != null)
+                {
+                    productStock.Quantity += stock;
                 }
                 else
                 {
-                    var newstock = new Stock
+                    // Create a new stock entry
+                    var newStock = new Stock
                     {
-                        Product = product,
                         ProductId = productid,
-                        Quantity = stock
+                        Quantity = stock,
+                        Product = product
                     };
 
-                     _context.stock.Add(newstock);
+                    await _context.stock.AddAsync(newStock);
                 }
 
-               
+                // Save changes to the database
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
-
-
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"Error in AddStock: {ex.Message}\n{ex.StackTrace}");
+                throw; // Re-throw the exception to propagate it
+            }
         }
+
+
+
 
         public async Task<List<StockProductDto>> GetAllProductsAsync()
         {
