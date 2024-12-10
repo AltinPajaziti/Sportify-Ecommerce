@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sportify.Datalayer;
 
@@ -11,9 +12,11 @@ using sportify.Datalayer;
 namespace sportify.Datalayer.Migrations
 {
     [DbContext(typeof(SportifyContext))]
-    partial class SportifyContextModelSnapshot : ModelSnapshot
+    [Migration("20241210202138_baseentitypropertychange")]
+    partial class baseentitypropertychange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

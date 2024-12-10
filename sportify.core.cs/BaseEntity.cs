@@ -13,7 +13,7 @@ namespace sportify.core.cs
         public int id { get; set; }
         public string? Insertedby { get; set; }
 
-        public string? LastModified { get; set; }
+        public DateTime? LastModified { get; set; }
 
 
 
