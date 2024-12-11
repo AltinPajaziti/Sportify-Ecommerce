@@ -8,7 +8,7 @@ namespace sportify.Datalayer.DTOs
 {
     public class YearChartDto
     {
-        public int ThisYear { get; set; }
-        public int LastYear { get; set; }
+        public object ThisYear { get; set; }
+        public object LastYear { get; set; }
     }
 }
