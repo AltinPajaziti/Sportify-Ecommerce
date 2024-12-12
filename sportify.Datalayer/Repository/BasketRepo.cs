@@ -209,14 +209,16 @@ namespace sportify.Datalayer.Repository
 
         public async Task<ProductDto> AddToBasket(ProductDto product)
         {
-            var UseridClaim = _contextAccessor.HttpContext?.User.Claims
+            // Retrieve the user ID from the claims
+            var userIdClaim = _contextAccessor.HttpContext?.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            if (UseridClaim == null || !int.TryParse(UseridClaim, out int Userid))
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
             {
                 throw new Exception("User ID not found in claims.");
             }
 
+            // Fetch the product with stock details
             var existingProduct = await _context.products
                 .Include(p => p.stock)
                 .FirstOrDefaultAsync(p => p.id == product.id);
@@ -226,57 +228,64 @@ namespace sportify.Datalayer.Repository
                 throw new Exception("The product is either out of stock or does not exist.");
             }
 
+            // Fetch the user's basket with associated products
             var existingBasket = await _context.basket
                 .Include(b => b.BasketProducts)
-                .FirstOrDefaultAsync(b => b.userid == Userid);
+                .FirstOrDefaultAsync(b => b.userid == userId);
 
             if (existingBasket != null)
             {
+                // Check if the product is already in the basket
                 var existingBasketProduct = existingBasket.BasketProducts
                     .FirstOrDefault(bp => bp.Productid == product.id);
 
                 if (existingBasketProduct != null)
                 {
-                    existingBasketProduct.Qty += 1;
+                    // Increment quantity if product exists in the basket
+                    existingBasketProduct.Qty++;
                     existingBasketProduct.IsPurchased = true;
-
-
                 }
                 else
                 {
+                    // Add new product to the basket
                     existingBasket.BasketProducts.Add(new BasketProduct
                     {
                         Productid = product.id,
                         Qty = 1,
-                        IsPurchased = true,
+                        IsPurchased = true
                     });
                 }
             }
             else
             {
+                // Create a new basket with the product
                 var newBasket = new Basket
                 {
-                    userid = Userid,
+                    userid = userId,
                     BasketProducts = new List<BasketProduct>
             {
                 new BasketProduct
                 {
                     Productid = product.id,
                     Qty = 1,
-                    IsPurchased = true,
+                    IsPurchased = true
                 }
             }
                 };
+
                 _context.basket.Add(newBasket);
             }
 
-            existingProduct.stock.Quantity -= 1;
+            // Update product stock quantity
+            existingProduct.stock.Quantity--;
             _context.products.Update(existingProduct);
 
+            // Save changes to the database
             await _context.SaveChangesAsync();
 
             return product;
         }
+
 
         public async Task<List<ProductDto>> GetAllPurchasedProductsAsync()
         {
