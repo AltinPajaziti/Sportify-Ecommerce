@@ -1,4 +1,4 @@
-# 🛒 **Sportify eCommerce Web Application**
+# 🛒 **Sportify Ecommerce Web Application**
 
 **Sportify** is a modern eCommerce web application for purchasing sports-related products. Built with **.NET 8** for the backend API, **Angular 16** for the frontend, and **SQL** for database management, this platform offers both users and admins a streamlined experience for managing products, orders, and inventory.
 
