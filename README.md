@@ -46,4 +46,4 @@ The **Sportify eCommerce Web Application** features two modules:
 
 ### 1. **Clone the Repository**:
 ```bash
-git clone https://github.com/username/Sportify-eCommerce.git
+git clone https://github.com/AltinPajaziti/Sportify-Ecommerce.git
