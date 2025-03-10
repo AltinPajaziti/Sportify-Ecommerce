@@ -1,0 +1,48 @@
+<div class="cart-container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Photo Column -->
+    <ng-container matColumnDef="Image">
+      <th mat-header-cell *matHeaderCellDef> Photo </th>
+      <td mat-cell *matCellDef="let element" class="image-cell">
+        <img [src]="element.photo" alt="{{ element.name }}" class="product-image">
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="ProductName">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="Description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="Price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let element">{{ element.price | currency }}</td>
+    </ng-container>
+
+    <!-- Quantity Column -->
+    <ng-container matColumnDef="Quantity">
+      <th mat-header-cell *matHeaderCellDef> Quantity </th>
+      <td mat-cell *matCellDef="let element">{{ element.stockQuantity }}</td>
+    </ng-container>
+
+    <!-- Delete Button Column -->
+    <ng-container matColumnDef="DeleteButton">
+      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-fab class="delete-button" aria-label="Delete item" (click)="deleteItem(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

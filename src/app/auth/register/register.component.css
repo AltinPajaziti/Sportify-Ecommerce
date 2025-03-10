@@ -1,0 +1,63 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.register-card {
+  width: 350px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: #f9f9f9;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+mat-card-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  padding-bottom: 25px;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduced gap between input fields */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduced gap between input fields */
+}
+
+button {
+  width: 100%;
+  background-color: #4254ff;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(66, 84, 255, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2f42d2;
+}
+
+.error {
+  padding: 10px;
+  width: 100%;
+  color: white;
+  background-color: red;
+  text-align: center;
+  border-radius: 8px;
+}
