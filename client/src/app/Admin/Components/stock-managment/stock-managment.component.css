@@ -1,0 +1,56 @@
+/* Add some margin around the table */
+.mat-elevation-z8 {
+  margin: 16px;
+  overflow: hidden; /* Prevent overflow when content is larger */
+  border-radius: 8px; /* Slightly round corners */
+}
+
+/* Ensure the table takes up full width */
+table {
+  width: 100%;
+}
+
+/* Style for the table header */
+th.mat-header-cell {
+  background-color: #f5f5f5; /* Light gray for header background */
+  font-weight: bold;
+  text-align: left;
+  padding: 8px;
+}
+
+/* Style for table cells */
+td.mat-cell {
+  padding: 8px;
+  text-align: left;
+}
+
+/* Zebra striping for rows */
+tr:nth-child(odd) {
+  background-color: #fafafa; /* Light gray for alternate rows */
+}
+
+tr:nth-child(even) {
+  background-color: #ffffff; /* White for alternate rows */
+}
+
+/* Hover effect for rows */
+tr.mat-row:hover {
+  background-color: #e8f0fe; /* Light blue on hover */
+}
+
+/* Paginator styles */
+.mat-paginator {
+  background-color: #f9f9f9; /* Light background */
+  padding: 8px; /* Add some space */
+  border-top: 1px solid #ddd; /* Light border on top */
+}
+
+/* Paginator buttons */
+.mat-paginator-navigation-button {
+  color: #007bff; /* Primary blue color */
+}
+
+/* Current page number style */
+.mat-paginator-range-label {
+  font-weight: bold;
+}

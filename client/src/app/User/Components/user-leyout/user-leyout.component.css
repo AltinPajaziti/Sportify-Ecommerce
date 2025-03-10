@@ -1,0 +1,296 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .example-container {
+    height: 100vh;
+  }
+  
+  .example-sidenav {
+    width: 250px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+  mat-list-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  mat-icon {
+    margin-right: 10px; 
+  }
+  .smallcontainer{
+    display: flex;
+    align-items: center;
+  }
+
+  .container{
+    display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content:center;
+	align-items: stretch;
+	align-content: stretch;
+
+  }
+
+
+  .carousel-caption {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+  
+  .carousel-caption h1 {
+    font-size: 3rem;
+  }
+  
+  .carousel-caption button {
+    margin-top: 20px;
+  }
+  .content{
+    margin-top: 255px;
+  }
+
+
+  app-product{
+    display: flex;
+    
+  }
+ h1{
+  text-align: center;
+  margin-top: 12px;
+ }
+
+.content2{
+  margin: 10px;
+  padding: 10px;
+}
+ .inner-content{
+  display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-evenly;
+	align-items: center;
+	align-content: stretch;
+  gap: 25px ;
+  
+ }
+ .inner-content img{
+  width: 250px;
+  border-radius: 8px;
+ }
+
+
+ /* Layout Container for Sidebar and Products */
+.layout-container {
+  display: flex;
+  min-height: 100vh; /* Full viewport height */
+  gap: 16px; /* Gap between sidebar and products */
+  padding: 16px; /* Padding around the container */
+  background-color: #f9f9f9; /* Light background */
+  box-sizing: border-box;
+}
+
+/* Sidebar for Filters */
+.sidebar {
+  flex: 0 0 300px; /* Fixed width for the sidebar */
+  background: #ffffff; /* White background for filters */
+  border-radius: 8px; /* Smooth edges */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.extraelements{
+  width: 1550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;;
+}
+
+
+/* Filter Form Styling */
+.sidebar form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar form .mat-form-field {
+  width: 100%; /* Full width for inputs */
+}
+
+.sidebar form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff; /* Button color */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar form button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+.extraitems{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive Layout Adjustments */
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex: 1 0 auto;
+  }
+
+  .example-sidenav {
+    position: absolute;
+    width: 100%;
+  }
+
+  mat-sidenav {
+    width: 70%; /* Zë vetëm 70% të gjerësisë */
+    max-width: 300px; /* Kufizo gjerësinë maksimale */
+  }
+  .mat-drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Shton efekt për sfond */
+  }
+
+
+  mat-sidenav {
+    width: 100%;
+  }
+  mat-sidenav-content {
+    margin-left: 0;
+  }
+
+
+  footer .row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .extraitems{
+    display: none !important;
+  }
+
+  
+}
+
+
+mat-toolbar{
+  margin: 0 auto !important;
+}
+
+
+/* Tablet screens */
+@media (max-width: 1024px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex: 1 0 auto;
+  }
+
+  .example-sidenav {
+    position: absolute;
+    width: 100%;
+  }
+
+  mat-sidenav {
+    width: 60%; /* Slightly smaller sidenav for tablets */
+    max-width: 300px; /* Maintain max width */
+  }
+
+  mat-sidenav-content {
+    margin-left: 0;
+  }
+
+  footer .row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .extraitems {
+    display: block ; /* Show extra items again on large screens */
+  }
+
+
+  .mat-drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Add backdrop effect */
+  }
+}
+
+
+/* Large screens */
+@media (min-width: 1025px) {
+  /* Ensures layout is a multi-column row on larger screens */
+  .layout-container {
+    display: flex;
+    flex-direction: row; /* Multi-column layout */
+    flex-wrap: wrap; /* Prevents flex items from collapsing */
+    justify-content: space-between; /* Adjusts alignment of children */
+  }
+
+  /* Sidebar properties */
+  .sidebar {
+    flex: 0 0 25%; /* Sidenav width is 25% */
+  }
+
+  /* Positioning and width of the sidenav */
+  .example-sidenav {
+    position: fixed; /* Keeps the sidenav fixed to prevent layout shifts */
+    top: 0; /* Sticks the sidenav to the top of the viewport */
+    left: 0;
+    bottom: 0;
+    width: 350px; /* Specific width for the sidenav */
+    z-index: 1000; /* Keeps sidenav on top of content */
+  }
+
+  /* Ensures the sidenav content is not pushed down when toggling */
+  mat-sidenav {
+    width: 25%; /* Keeps sidenav width consistent */
+    max-width: 350px; /* Maximum width of sidenav */
+  }
+
+  mat-sidenav-content {
+    margin-left: 0; /* Ensures the content doesn't shift to the left */
+    transition: margin-left 0.3s ease; /* Smooth transition for margin when sidenav opens/closes */
+  }
+
+  /* Adjusts layout when sidenav is open */
+  .example-sidenav-open mat-sidenav-content {
+    margin-left: 350px; /* Moves content to the right when sidenav is open */
+  }
+
+  /* Footer adjustments */
+  footer .row > div {
+    flex: 1; /* Ensures footer items are evenly distributed */
+    max-width: 100%; /* Prevents footer items from overflowing */
+  }
+
+  /* Displays extra items on large screens */
+  .extraitems {
+    display: block; /* Shows additional items again on large screens */
+  }
+
+  /* Adjusts backdrop for the sidenav */
+  .mat-drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Adds a semi-transparent backdrop */
+  }
+}
+

@@ -1,0 +1,33 @@
+<div class="some-content">
+  <h1 mat-dialog-title>{{ data.name }}</h1>
+  <button mat-button mat-dialog-close class="close-button">x</button>
+</div>
+
+<div class="product-dialog-content">
+  <img src="{{data.photo}}" alt="Product Image" class="product-image">
+
+  <div class="product-details">
+    <h4><b>Product Name</b></h4>
+    <p>{{ data.name }}</p>
+
+    <h4><b>Description</b></h4>
+    <p>{{ data.description }}</p>
+
+    <h4><b>Price</b></h4>
+    <p>{{ data.price }}</p>
+
+    <div class="quantity-selector">
+      <button mat-button (click)="decrease()">-</button>
+      <input type="text" [value]="quantity" readonly class="quantity-display">
+      <button mat-button (click)="increase()">+</button>
+    </div>
+
+    <!-- Dialog Actions -->
+    <div mat-dialog-actions class="action-buttons">
+      <div class="right-buttons">
+        <button mat-button mat-dialog-close class="Basket-button" (click)="addToBasket()">Add to Basket</button>
+        <button mat-button class="buyitnow" (click)="BuyNow(data.id)">Buy it now</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+.carousel-container {
+    width: 100%;        /* Make carousel width 100% */
+    height: 400px;      /* Set fixed height (adjust as needed) */
+    overflow: hidden;   /* Hide overflow to maintain fixed height */
+}
+
+.picsum-img-wrapper {
+    height: 100%;       /* Ensure wrapper takes full height */
+    display: flex;      /* Use flexbox to center the image */
+    justify-content: center; /* Center the image horizontally */
+    align-items: center;     /* Center the image vertically */
+}
+
+ img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover; 
+}
+g-container{
+    background-color: black;
+}
+
+@media (min-width: 1025px) {
+    ngb-carousel{
+        width: 1550px;
+        display: flex;
+        justify-content: center !important;
+        margin: 0 auto;
+        background-color: black;
+
+    }
+  }
+
+

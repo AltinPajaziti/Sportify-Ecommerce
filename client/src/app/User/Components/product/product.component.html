@@ -1,0 +1,78 @@
+<div class="container">
+  <mat-card class="example-card" appearance="outlined" *ngFor="let product of Produkti; let i =index">
+    <mat-card-header>
+      <mat-card-title style="margin-top: 5px;margin-bottom: 5px;">{{ product.name }}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="product.photo" alt="Product Photo" class="product-image">
+    <mat-card-content style="margin-top:15px;">
+      <p>{{ product.description }}</p>
+    </mat-card-content>
+    <style>.example-card {
+      margin: 15px; /* Space around each card */
+      transition: transform 0.2s; /* Animation effect for hover */
+      width: 250px; /* Fixed width for the card */
+      height: 300px; /* Fixed height for the card */
+      display: flex;
+      flex-direction: column; /* Align children in a column */
+    }
+    
+    .example-card:hover {
+      transform: scale(1.05); /* Slightly enlarge card on hover */
+    }
+    
+    .product-image {
+      width: 100%; /* Full width of the card */
+      height: 150px; /* Fixed height for the image */
+      object-fit: cover; /* Maintain aspect ratio and cover the area */
+    }
+    
+    mat-card-content {
+      flex-grow: 1; /* Allow content area to take remaining space */
+    }
+    button:hover {
+      background-color: #3f51b5; /* Change to the color you like */
+      color: white; /* Adjust text/icon color to contrast with the background */
+    }
+    .heart-icon {
+      display: flex; /* Flexbox for centering */
+      justify-content: center; 
+      align-items: center; 
+      height: 30px;
+      width: 30px;
+      transition: all 0.7s ease;
+    }
+    
+    .heart-icon:hover {
+      background-color: rgb(249, 99, 99); 
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+      border-radius: 10%; 
+    }
+    </style>
+    <mat-card-actions style="display: flex; align-items: center; justify-content: space-evenly;">
+      <mat-icon
+        (click)="AddToFav(product.id); toggleFavorite(i)"
+        [ngStyle]="{'color': favorite[i] ? 'red' : 'grey'}"
+        style="font-size: 24px; transition: color 0.3s ease; flex-grow: 1; text-align: center; height: 30px;"
+        class="heart-icon"
+      >
+        {{ favorite[i] ? 'favorite' : 'favorite_border' }}
+      </mat-icon>
+    
+      <button mat-button 
+              (click)="openDialog(product.id)"
+              style="flex-grow: 1; text-align: center;">
+        View
+      </button>
+    
+      <button mat-button 
+              style="border: 1px solid #3f51b5; color: #3f51b5; display: flex; justify-content: center; align-items: center; height: 40px; background-color: transparent; transition: background-color 0.3s ease, color 0.3s ease; flex-grow: 1; margin: 10px;"
+              (click)="AddToCart(product)">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </mat-card-actions>
+    
+  </mat-card>
+  
+</div>

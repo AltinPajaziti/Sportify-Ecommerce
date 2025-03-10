@@ -1,0 +1,42 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="menycontainer" >
+    <div class="menysmallcontainer"  [routerLink]="['orders']">
+      <div class="icon-container"  >
+        <i class="fa fa-cloud-download" ></i></div>
+      <h3>2500</h3>
+      <p>Orders</p>
+    </div> 
+    <div class="menysmallcontainer" [routerLink]="['StockManagment']">
+      <div class="icon-container"><i class="fa fas fa-box"></i></div>
+    <h3>123.50</h3>
+      <p>Stock Managment</p>
+    </div>
+    <div class="menysmallcontainer"[routerLink]="['users']">
+      <div class="icon-container"><i class="fa fa-users" ></i></div>
+      <h3>1,805</h3>
+      <p>Users</p>
+    </div>
+    <div class="menysmallcontainer" [routerLink]="['Category']">
+      <div class="icon-container" ><i class="fa fas fa-list"></i></div>
+      <h3>54</h3>
+      <p>Category</p>
+    </div>
+  </div>
+  
+  <div class="graphics-conteiner" >
+    <h2 style="text-align: left; font-size: 24px; color: #343a40; font-weight: 600; margin-bottom: 15px;padding: 10px;">Graphics Data</h2>
+    <hr>
+    <div class="pie-graphic">
+    <app-pie-chart></app-pie-chart>
+      
+        
+    <app-app-monthly-orders-chart></app-app-monthly-orders-chart>
+
+      
+    </div>
+  </div>
+

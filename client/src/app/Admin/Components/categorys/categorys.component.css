@@ -1,0 +1,104 @@
+.cart-container {
+    width: 85%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #3f51b5;
+    color: black; /* Changed header text color to black */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  td {
+    background-color: #fff;
+    color: #555;
+  }
+  
+  td img.product-image {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  
+  button {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Buy Button Styling */
+  .buy-button {
+    background-color: #3f51b5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  
+  .buy-button:hover {
+    background-color: #304ffe;
+  }
+  
+  /* Delete Button Styling */
+  .delete-button {
+    background-color: #ff4e4e;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+  }
+  
+  .delete-button mat-icon {
+    font-size: 20px;
+  }
+  
+  .delete-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Row Hover Effect */
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  @media (max-width: 768px) {
+    .cart-container {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    th, td {
+      padding: 12px;
+      font-size: 12px;
+    }
+  
+    td img.product-image {
+      width: 80px;
+    }
+  
+    .buy-button, .delete-button {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+  }
+  

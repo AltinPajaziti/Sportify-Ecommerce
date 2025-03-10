@@ -1,0 +1,90 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+  <!-- Sidebar -->
+   
+
+
+
+  
+  <!-- Main content with toolbar -->
+   <div class="sllajderi">
+    <app-slider *ngIf="Role != 'Admin'"></app-slider>
+
+   </div>
+
+
+    <!-- Main page content -->
+<div class="container"  *ngIf="Role != 'Admin'">
+  <h1>Latest Products</h1>
+  <app-product [Produkti]="latestproduct" ></app-product>
+
+</div>
+
+<!-- <div class="menycontainer" *ngIf="Role != 'User'">
+  <div class="menysmallcontainer">
+    <div class="icon-container"><i class="fa fa-users"></i></div>
+    <h3>2500</h3>
+    <p>Welcome</p>
+  </div>
+  <div class="menysmallcontainer">
+    <div class="icon-container"><i class="fa fa-clock"></i></div>
+    <h3>123.50</h3>
+    <p>Average Time</p>
+  </div>
+  <div class="menysmallcontainer">
+    <div class="icon-container"><i class="fa fa-cloud-download"></i></div>
+    <h3>1,805</h3>
+    <p>Orders</p>
+  </div>
+  <div class="menysmallcontainer">
+    <div class="icon-container"><i class="fa fa-comments"></i></div>
+    <h3>54</h3>
+    <p>Comments</p>
+  </div>
+</div>
+
+<div class="graphics-conteiner" *ngIf="Role != 'User'">
+  <h2 style="text-align: left; font-size: 24px; color: #343a40; font-weight: 600; margin-bottom: 15px;padding: 10px;">Graphics Data</h2>
+  <hr>
+  <div class="pie-graphic">
+    <app-pie-chart></app-pie-chart>
+    <app-app-monthly-orders-chart></app-app-monthly-orders-chart>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+<div class="content2" *ngIf="Role != 'Admin'">
+  
+  <div class="Theinnercontent">
+    <div class="inner-content">
+      <img src="https://media.licdn.com/dms/image/C4D12AQE7_sVP5NvXoA/article-cover_image-shrink_720_1280/0/1520110596092?e=2147483647&v=beta&t=t8T7f7Eom1ZZbXf7Och_RKlmh4z_icPvf0-M0RQsr14" alt="">
+      <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus praesentium sit ducimus possimus, necessitatibus quisquam officia quasi cumque quam blanditiis! Dolorum dolor sapiente consequatur? Dignissimos natus consequatur sint consequuntur quo.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum temporibus tempora architecto, reprehenderit voluptas totam quas quibusdam unde sunt natus neque atque deleniti illo ducimus necessitatibus nostrum quos velit cum.</p>
+    
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Footer -->
+
+<!-- Footer -->
+
+
+
+
+<!-- Include Bootstrap JS here -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

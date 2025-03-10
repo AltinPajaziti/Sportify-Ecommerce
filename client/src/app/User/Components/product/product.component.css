@@ -1,0 +1,85 @@
+.example-card {
+  margin: 15px; /* Space around each card */
+  transition: transform 0.2s; /* Animation effect for hover */
+  width: 250px; /* Fixed width for the card */
+  height: 300px; /* Fixed height for the card */
+  display: flex;
+  flex-direction: column; /* Align children in a column */
+}
+
+.example-card:hover {
+  transform: scale(1.05); /* Slightly enlarge card on hover */
+}
+
+.product-image {
+  width: 100%; /* Full width of the card */
+  height: 150px; /* Fixed height for the image */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+}
+
+mat-card-content {
+  flex-grow: 1; /* Allow content area to take remaining space */
+}
+button:hover {
+  background-color: #3f51b5; /* Change to the color you like */
+  color: white; /* Adjust text/icon color to contrast with the background */
+}
+.heart-icon {
+  display: flex; /* Flexbox for centering */
+  justify-content: center; 
+  align-items: center; 
+  height: 30px;
+  width: 30px;
+  transition: all 0.7s ease;
+}
+
+.heart-icon:hover {
+  background-color: rgb(249, 99, 99); 
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  border-radius: 10%; 
+}
+
+@media (max-width: 768px) {
+  .inner-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr !important; /* Ensure one column for small screens */
+  }
+
+  .container mat-card {
+    width: 250px;
+    margin: 0 auto;
+  }
+}
+
+/* Media query for screens between 600px and 1024px */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important; /* Two columns for screens between 600px and 1024px */
+    gap: 10px; /* Positive gap for spacing */
+  }
+}
+
+/* Media query for screens 600px and smaller */
+@media (max-width: 599px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr; /* One column for very small screens */
+    gap: 10px; /* Positive gap for spacing */
+  }
+}
+
+@media (min-width: 1025px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px; /* Optional: Add gap if necessary for larger screens */
+  }
+}
